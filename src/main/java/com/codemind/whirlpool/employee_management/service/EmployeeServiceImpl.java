@@ -1,5 +1,6 @@
 package com.codemind.whirlpool.employee_management.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +28,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private final EmployeeRepository employeeRepository;
+	private final EmailService emailService;
 
-	public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+	public EmployeeServiceImpl(EmployeeRepository employeeRepository, EmailService emailService) {
 		this.employeeRepository = employeeRepository;
+		this.emailService = emailService;
 	}
 
 	@Override
@@ -40,6 +43,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee savedEmp = employeeRepository.save(employee);
 		log.debug("Converting the entity to dto ");
 		EmployeeDto response = EmployeeConverter.getEmployeeDto(savedEmp);
+		triggerMailService(response.getName(), response.getEmail());
 		log.info("END:EmployeeServiceImpl --->saveEmployee");
 		return response;
 	}
@@ -102,6 +106,104 @@ public class EmployeeServiceImpl implements EmployeeService {
 			Employee savedEmpData = employeeRepository.save(newEmployeeData);
 			return EmployeeConverter.getEmployeeDto(savedEmpData);
 		}
+	}
+
+	public String triggerMailService(String name, String toEmail) {
+		String sub = "Welcome to Praveen IT Course";
+		String body = "<!DOCTYPE html>\r\n"
+				+ "<html lang=\"en\">\r\n"
+				+ "<head>\r\n"
+				+ "    <meta charset=\"UTF-8\">\r\n"
+				+ "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n"
+				+ "    <title>Welcome to the Java Course</title>\r\n"
+				+ "    <style>\r\n"
+				+ "        body {\r\n"
+				+ "            font-family: Arial, sans-serif;\r\n"
+				+ "            background-color: #f4f4f4;\r\n"
+				+ "            color: #333;\r\n"
+				+ "            margin: 0;\r\n"
+				+ "            padding: 0;\r\n"
+				+ "        }\r\n"
+				+ "        .container {\r\n"
+				+ "            width: 100%;\r\n"
+				+ "            max-width: 600px;\r\n"
+				+ "            margin: 0 auto;\r\n"
+				+ "            background-color: #fff;\r\n"
+				+ "            padding: 20px;\r\n"
+				+ "            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\r\n"
+				+ "        }\r\n"
+				+ "        .header {\r\n"
+				+ "            text-align: center;\r\n"
+				+ "            padding: 20px 0;\r\n"
+				+ "        }\r\n"
+				+ "        .header img {\r\n"
+				+ "            max-width: 100px;\r\n"
+				+ "        }\r\n"
+				+ "        .content {\r\n"
+				+ "            padding: 20px;\r\n"
+				+ "        }\r\n"
+				+ "        .content h1 {\r\n"
+				+ "            color: #0066cc;\r\n"
+				+ "        }\r\n"
+				+ "        .content p {\r\n"
+				+ "            line-height: 1.6;\r\n"
+				+ "        }\r\n"
+				+ "        .button {\r\n"
+				+ "            display: block;\r\n"
+				+ "            width: 200px;\r\n"
+				+ "            margin: 20px auto;\r\n"
+				+ "            padding: 10px;\r\n"
+				+ "            background-color: #0066cc;\r\n"
+				+ "            color: #fff;\r\n"
+				+ "            text-align: center;\r\n"
+				+ "            text-decoration: none;\r\n"
+				+ "            border-radius: 5px;\r\n"
+				+ "        }\r\n"
+				+ "        .footer {\r\n"
+				+ "            text-align: center;\r\n"
+				+ "            padding: 20px;\r\n"
+				+ "            font-size: 12px;\r\n"
+				+ "            color: #777;\r\n"
+				+ "        }\r\n"
+				+ "    </style>\r\n"
+				+ "</head>\r\n"
+				+ "<body>\r\n"
+				+ "    <div class=\"container\">\r\n"
+				+ "        <div class=\"header\">\r\n"
+				+ "            <img src=\"https://example.com/logo.png\" alt=\"Course Logo\">\r\n"
+				+ "        </div>\r\n"
+				+ "        <div class=\"content\">\r\n"
+				+ "            <h1>Welcome to the Java Course!</h1>\r\n"
+				+ "            <p>Dear Guru,</p>\r\n"
+				+ "            <p>We are thrilled to have you join our Java course. This course is designed to help you master the fundamentals of Java programming and build a strong foundation for your future development projects.</p>\r\n"
+				+ "            <p>Here are a few important details to get you started:</p>\r\n"
+				+ "            <ul>\r\n"
+				+ "                <li><strong>Course Start Date:</strong> 2024-08-08</li>\r\n"
+				+ "                <li><strong>Course Duration:</strong> 5 Months</li>\r\n"
+				+ "                <li><strong>Instructor:</strong> Praveen Bhosle/li>\r\n"
+				+ "                <li><strong>Course Platform:</strong> Java</li>\r\n"
+				+ "            </ul>\r\n"
+				+ "            <p>Please ensure you have the following ready before the course begins:</p>\r\n"
+				+ "            <ul>\r\n"
+				+ "                <li>A computer with internet access</li>\r\n"
+				+ "                <li>Java Development Kit (JDK) installed</li>\r\n"
+				+ "                <li>An Integrated Development Environment (IDE) such as IntelliJ IDEA or Eclipse</li>\r\n"
+				+ "            </ul>\r\n"
+				+ "            <p>If you have any questions or need assistance, feel free to reach out to our support team at [Support Email].</p>\r\n"
+				+ "            <p>We look forward to helping you on your journey to becoming a Java expert!</p>\r\n"
+				+ "            <p>Best regards,</p>\r\n"
+				+ "            <p>The velocity Team</p>\r\n"
+				+ "            <a class=\"button\">Get Started</a>\r\n"
+				+ "        </div>\r\n"
+				+ "        <div class=\"footer\">\r\n"
+				+ "            <p>&copy; 2024 Velocity. All rights reserved.</p>\r\n"
+				+ "            <p>Pune</p>\r\n"
+				+ "        </div>\r\n"
+				+ "    </div>\r\n"
+				+ "</body>\r\n"
+				+ "</html>\r\n";
+		String response = emailService.sendEmail(toEmail, sub, body);
+		return response;
 	}
 
 }

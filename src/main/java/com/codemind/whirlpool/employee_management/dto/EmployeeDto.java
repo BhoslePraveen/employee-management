@@ -2,16 +2,21 @@ package com.codemind.whirlpool.employee_management.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 import com.codemind.whirlpool.employee_management.enums.Department;
 
 public class EmployeeDto {
 	private Long id;
+	@NotBlank
 	private String name;
 	private LocalDate dob;
 	private String gender;
 	private String faculty;
 	private String department;
 	private LocalDate joinDate;
+	@Email(message = "Enter valid email address")
 	private String email;
 	private String phoneNumber;
 	private String userName;
@@ -95,4 +100,12 @@ public class EmployeeDto {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
+
+	@Override
+	public String toString() {
+		return "EmployeeDto [id=" + id + ", name=" + name + ", dob=" + dob + ", gender=" + gender + ", faculty="
+				+ faculty + ", department=" + department + ", joinDate=" + joinDate + ", email=" + email
+				+ ", phoneNumber=" + phoneNumber + ", userName=" + userName + "]";
+	}
+	
 }

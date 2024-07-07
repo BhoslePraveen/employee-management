@@ -57,8 +57,6 @@ public class EmployeeControllerTest {
 	@LocalServerPort
 	private int port;
 
-	@Autowired
-	private EmployeeService employeeService;
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
@@ -223,5 +221,7 @@ public class EmployeeControllerTest {
 		assertEquals(Status.IN_ACTIVE, employee.getIsActive());
 
 	}
+	
+	//TODO: COmplete the put API Testing Here.
 
 }

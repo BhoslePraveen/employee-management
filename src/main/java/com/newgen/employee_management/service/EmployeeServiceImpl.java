@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.newgen.employee_management.dto.request.EmployeeRequestDto;
 import com.newgen.employee_management.dto.response.EmployeeDto;
+import com.newgen.employee_management.mapper.EmployeeMapper;
 import com.newgen.employee_management.model.Employee;
 import com.newgen.employee_management.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
 
     @Override
     public EmployeeDto createEmployee(EmployeeRequestDto employeeDto) {
-        Employee savedEmployee = employeeRepository.save(toEntity(employeeDto));
-        return toDto(savedEmployee);
+        Employee savedEmployee = employeeRepository.save(employeeMapper.toEntity(employeeDto));
+        return employeeMapper.toDto(savedEmployee);
     }
 
     @Override
@@ -31,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employees.
                 stream()
-                .map(emp -> toDto(emp))
+                .map(emp -> employeeMapper.toDto(emp))
                 .collect(Collectors.toList());
 
     }
@@ -39,14 +41,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto getEmployeeById(Long empId) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
-        return optionalEmployee.map(emp -> toDto(emp)).orElse(null);
+        return optionalEmployee.map(emp -> employeeMapper.toDto(emp)).orElse(null);
     }
 
     @Override
     public EmployeeDto updateEmployee(Long empId, Employee employee) {
         employee.setId(empId);
         Employee updatedEmployee = employeeRepository.save(employee);
-        return toDto(updatedEmployee);
+        return employeeMapper.toDto(updatedEmployee);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             Employee employee = optionalEmployee.get();
             employee.setSalary(salary);
             Employee updatedEmp = employeeRepository.save(employee);
-            return toDto(updatedEmp);
+            return employeeMapper.toDto(updatedEmp);
         } else {
             throw new RuntimeException("Employee not found");
         }
@@ -67,7 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteById(empId);
     }
 
-    EmployeeDto toDto(Employee employee) {
+    /*EmployeeDto toDto(Employee employee) {
         return EmployeeDto.builder()
                 .empId(employee.getId())
                 .firstName(employee.getFirstName())
@@ -92,5 +94,5 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDateOfBirth(dto.getDateOfBirth());
         employee.setJoiningDate(dto.getJoiningDate());
         return employee;
-    }
+    }*/
 }

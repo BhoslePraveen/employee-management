@@ -1,18 +1,22 @@
 package com.newgen.employee_management.service;
 
+import com.newgen.employee_management.dto.request.EmployeeRequestDto;
+import com.newgen.employee_management.dto.response.EmployeeDto;
 import com.newgen.employee_management.model.Employee;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface EmployeeService {
-    Employee createEmployee(Employee employee);
+    EmployeeDto createEmployee(EmployeeRequestDto employee);
 
-    List<Employee> getAllEmployees();
+    List<EmployeeDto> getAllEmployees();
 
-    Employee getEmployeeById(Long empId);
+    EmployeeDto getEmployeeById(Long empId);
 
-    Employee updateEmployee(Long empId, Employee employee);
+    EmployeeDto updateEmployee(Long empId, Employee employee);
 
-    Employee updateEmployeeSalary(Long empId, BigDecimal salary);
+    EmployeeDto updateEmployeeSalary(Long empId, BigDecimal salary);
+
+    void deleteEmployeeById(Long empId);
 }

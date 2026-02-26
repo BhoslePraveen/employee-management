@@ -1,7 +1,10 @@
 package com.newgen.employee_management.controller;
 
+import com.newgen.employee_management.dto.request.EmployeeRequestDto;
+import com.newgen.employee_management.dto.response.EmployeeDto;
 import com.newgen.employee_management.model.Employee;
 import com.newgen.employee_management.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,38 +21,43 @@ public class EmployeeController {
 
     /* CREATING DATA ON SERVER */
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
-        Employee emp = employeeService.createEmployee(employee);
+    public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequestDto employee) {
+        EmployeeDto emp = employeeService.createEmployee(employee);
         return ResponseEntity.status(HttpStatus.CREATED).body(emp);
     }
 
     /* READING DATA ON SERVER */
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        List<Employee> employees = employeeService.getAllEmployees();
+    public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
+        List<EmployeeDto> employees = employeeService.getAllEmployees();
         return ResponseEntity.status(HttpStatus.OK).body(employees);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(
+    public ResponseEntity<EmployeeDto> getEmployee(
             @PathVariable(name = "id") Long empId) {
-        Employee employee = employeeService.getEmployeeById(empId);
+        EmployeeDto employee = employeeService.getEmployeeById(empId);
         return ResponseEntity.status(HttpStatus.OK).body(employee);
     }
 
     @PutMapping("/{employeeId}")
-    public ResponseEntity<Employee> updateEmployee(
+    public ResponseEntity<EmployeeDto> updateEmployee(
             @RequestBody Employee employee, @PathVariable(name = "employeeId") Long empId) {
-        Employee updatedEmployee = employeeService.updateEmployee(empId,employee);
+        EmployeeDto updatedEmployee = employeeService.updateEmployee(empId,employee);
         return ResponseEntity.status(HttpStatus.OK).body(updatedEmployee);
     }
 
     @PatchMapping("/{employeeId}/salary")
-    public ResponseEntity<Employee> updateEmployeeSalary(
+    public ResponseEntity<EmployeeDto> updateEmployeeSalary(
             @PathVariable(name = "employeeId") Long empId, @RequestParam BigDecimal salary) {
-        Employee employee = employeeService.updateEmployeeSalary(empId,salary);
+        EmployeeDto employee = employeeService.updateEmployeeSalary(empId,salary);
         return ResponseEntity.status(HttpStatus.OK).body(employee);
     }
 
+    @DeleteMapping("/{employeeId}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable(name = "employeeId") Long empId) {
+        employeeService.deleteEmployeeById(empId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+    }
 
 }

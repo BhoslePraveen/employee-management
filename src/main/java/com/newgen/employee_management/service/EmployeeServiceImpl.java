@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,11 +31,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDto> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
+        return employeeMapper.toDtos(employees);
 
-        return employees.
-                stream()
-                .map(emp -> employeeMapper.toDto(emp))
-                .collect(Collectors.toList());
 
     }
 
@@ -70,6 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /*EmployeeDto toDto(Employee employee) {
+        String name = employee.getFirstName()+" "+ employee.getLastName();
         return EmployeeDto.builder()
                 .empId(employee.getId())
                 .firstName(employee.getFirstName())

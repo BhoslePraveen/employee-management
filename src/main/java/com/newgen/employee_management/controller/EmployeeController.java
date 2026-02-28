@@ -4,6 +4,9 @@ import com.newgen.employee_management.dto.request.EmployeeRequestDto;
 import com.newgen.employee_management.dto.response.EmployeeDto;
 import com.newgen.employee_management.model.Employee;
 import com.newgen.employee_management.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,11 +19,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/employees")
 @RequiredArgsConstructor
+@Tag(name = "Employee APIs",description = "Employee Management end points")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
     /* CREATING DATA ON SERVER */
     @PostMapping
+    @Operation(summary = "Create a new Employee in Database")
+    @ApiResponse(responseCode = "201", description = "Employee Successfully Created")
     public ResponseEntity<EmployeeDto> createEmployee(@RequestBody @Valid EmployeeRequestDto employee) {
         EmployeeDto emp = employeeService.createEmployee(employee);
         return ResponseEntity.status(HttpStatus.CREATED).body(emp);

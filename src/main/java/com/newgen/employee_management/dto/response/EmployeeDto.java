@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Builder
 public class EmployeeDto {
     private Long  empId;
+    private String fullName;
     private String firstName;
     private String lastName;
     private String email;

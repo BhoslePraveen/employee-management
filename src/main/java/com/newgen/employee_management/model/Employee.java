@@ -1,8 +1,16 @@
 package com.newgen.employee_management.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +19,10 @@ import java.time.LocalDate;
 @Table(name = "employees")
 @Getter
 @Setter
+@ToString
+//@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonNaming(PropertyNamingStrategies.UpperCamelCaseStrategy.class)
+//@JsonPropertyOrder
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,12 +38,14 @@ public class Employee {
     private String email;
 
     @Column(name = "phone_num")
+    //@JsonProperty("mobile_number")
     private String phoneNumber;
 
     @Column(name = "designation")
     private String designation;
 
     @Column(name = "salary")
+   // @JsonIgnore
     private BigDecimal salary;
 
     @Column(name = "dob")

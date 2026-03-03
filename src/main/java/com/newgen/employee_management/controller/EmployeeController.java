@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +23,10 @@ import java.util.List;
 @RequestMapping("/api/v1/employees")
 @RequiredArgsConstructor
 @Tag(name = "Employee APIs",description = "Employee Management end points")
+@Slf4j
 public class EmployeeController {
+
+
     private final EmployeeService employeeService;
 
     /* CREATING DATA ON SERVER */
@@ -34,8 +40,12 @@ public class EmployeeController {
 
     /* READING DATA ON SERVER */
     @GetMapping
+    @Deprecated(forRemoval = true)
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
+        log.info("START:EmployeeController-->getAllEmployees");
         List<EmployeeDto> employees = employeeService.getAllEmployees();
+        log.debug("END:EmployeeController-->getAllEmployees : Size: {}",employees.size());
+        log.info("END:EmployeeController-->getAllEmployees");
         return ResponseEntity.status(HttpStatus.OK).body(employees);
     }
 

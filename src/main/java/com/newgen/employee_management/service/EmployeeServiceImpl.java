@@ -7,6 +7,8 @@ import com.newgen.employee_management.dto.response.EmployeeDto;
 import com.newgen.employee_management.model.Employee;
 import com.newgen.employee_management.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
+    private static final Logger log = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
 
     @Override
@@ -27,8 +30,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getAllEmployees() {
+        log.info("START:EmployeeServiceImpl-->getAllEmployees");
         List<Employee> employees = employeeRepository.findAll();
-
+        log.info("END:EmployeeServiceImpl-->getAllEmployees");
         return employees.
                 stream()
                 .map(emp -> toDto(emp))
